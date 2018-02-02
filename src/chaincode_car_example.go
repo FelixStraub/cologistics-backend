@@ -119,8 +119,8 @@ func (s *SmartContract) createShipment(APIstub shim.ChaincodeStubInterface, args
 	startKey := "SHIP000"
 	endKey := "SHIP999"
 
-	if len(args) != 12 {
-		return shim.Error("Incorrect number of arguments. Expecting 12")
+	if len(args) != 10 {
+		return shim.Error("Incorrect number of arguments. Expecting 10")
 	}
 	resultsIterator, err := APIstub.GetStateByRange(startKey, endKey)
 	if err != nil {
@@ -145,7 +145,7 @@ func (s *SmartContract) createShipment(APIstub shim.ChaincodeStubInterface, args
 	stringID = strconv.Itoa(id)
 	shipID = shipString + stringID
 
-	var ship = Shipment{Id: args[0],CreaterId: args[1], StatusUpdateTime: args[2], StatusChanger: args[3], Carrier: args[4], Recipient: args[5], Retailer: args[6], PickUp: args[7], Destination: args[8], Status: "Created", ContentList: args[10], Space: args[11]}
+	var ship = Shipment{Id: shipID,CreaterId: args[0], StatusUpdateTime: args[1], StatusChanger: args[2], Carrier: args[3], Recipient: args[4], Retailer: args[5], PickUp: args[6], Destination: args[7], Status: "Created", ContentList: args[8], Space: args[9]}
 
 	shipAsBytes , err := json.Marshal(ship);
 	if err != nil {
