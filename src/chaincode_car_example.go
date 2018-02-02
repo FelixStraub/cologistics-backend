@@ -49,7 +49,7 @@ type Content struct {
 
 // Define the car structure, with 4 properties.  Structure tags are used by encoding/json library
 type Shipment struct {
-	Id int64 `json:"id"`
+	Id string `json:"id"`
 	CreaterId string `json:"creater_id"`
 	StatusUpdateTime string `json:"status_update_time"`
 	StatusChanger string `json:"status_changer"`
@@ -59,8 +59,8 @@ type Shipment struct {
 	PickUp string `json:"pick_up"`
 	Destination string `json:"destination"`
 	Status string `json:"status"`
-	ContentList []Content `json:"content_list"`
-	Space int64 `json:"space"`
+	ContentList string `json:"content_list"`
+	Space string `json:"space"`
 	Owner string `json:"owner"`
 }
 
@@ -147,9 +147,9 @@ func (s *SmartContract) createShipment(APIstub shim.ChaincodeStubInterface, args
 	}
 
 	if err := APIstub.PutState(shipID, shipAsBytes); err != nil{
-		return shim.ERROR(err.Error())
+		return shim.Error(err.Error())
 	}else {
-		return shim.Success(ship)
+		return shim.Success(shipAsBytes)
 	}
 }
 
@@ -197,9 +197,9 @@ func (s *SmartContract) updateShipmentStatus(APIstub shim.ChaincodeStubInterface
 	}
 
 	if err := APIstub.PutState(shipID, shipAsBytes); err != nil{
-		return shim.ERROR(err.Error())
+		return shim.Error(err.Error())
 	}else {
-		return shim.Success(ship)
+		return shim.Success(shipAsBytes)
 	}
 }
 

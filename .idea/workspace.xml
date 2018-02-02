@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="395ac971-c16b-4a42-b198-ca3d6dac399a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chaincode_car_example.go" afterPath="$PROJECT_DIR$/src/chaincode_car_example.go" />
     </list>
     <ignored path="cologistics-backend.iws" />
@@ -28,8 +27,8 @@
       <file leaf-file-name="chaincode_car_example.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/chaincode_car_example.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.829222">
-              <caret line="257" column="1" selection-start-line="257" selection-start-column="1" selection-end-line="257" selection-end-column="1" />
+            <state vertical-scroll-proportion="0.7592105">
+              <caret line="201" column="47" selection-start-line="201" selection-start-column="47" selection-end-line="201" selection-end-column="47" />
               <folding>
                 <element signature="e#1120#1273#0" expanded="true" />
               </folding>
@@ -619,12 +618,12 @@
       <workItem from="1517608337663" duration="154000" />
       <workItem from="1517608540210" duration="832000" />
       <workItem from="1517609644574" duration="401000" />
-      <workItem from="1517610089367" duration="4730000" />
+      <workItem from="1517610089367" duration="5160000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6117000" />
+    <option name="totallyTimeSpent" value="6547000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -637,7 +636,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32932693" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3313253" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.05060241" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -704,8 +703,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/chaincode_car_example.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.829222">
-          <caret line="257" column="1" selection-start-line="257" selection-start-column="1" selection-end-line="257" selection-end-column="1" />
+        <state vertical-scroll-proportion="0.7592105">
+          <caret line="201" column="47" selection-start-line="201" selection-start-column="47" selection-end-line="201" selection-end-column="47" />
           <folding>
             <element signature="e#1120#1273#0" expanded="true" />
           </folding>
