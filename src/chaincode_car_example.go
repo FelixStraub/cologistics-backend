@@ -36,6 +36,7 @@ import (
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"github.com/hyperledger/fabric/protos/peer"
+	"time"
 )
 
 // Define the Smart Contract structure
@@ -51,18 +52,19 @@ type Content struct {
 type Shipment struct {
 	Id string `json:"id"`
 	CreaterId string `json:"creater_id"`
+	Status string `json:"status"`
 	StatusUpdateTime string `json:"status_update_time"`
 	StatusChanger string `json:"status_changer"`
 	Carrier string `json:"carrier"`
 	Recipient string `json:"recipient"`
 	Retailer string `json:"retailer"`
+	Price string `json:"price"`
 	PickUp string `json:"pick_up"`
 	Destination string `json:"destination"`
-	Status string `json:"status"`
 	ContentList string `json:"content_list"`
 	Space string `json:"space"`
-	Owner string `json:"owner"`
-	Price string `json:"price"`
+	Startpoint string `json:"startpoint"`
+	Endpoint string `json:"endpoint"`
 }
 
 
@@ -86,8 +88,8 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) peer.Respons
 	// Route to the appropriate handler function to interact with the ledger appropriately
 	if function == "createShipment" {
 		return s.createShipment(APIstub, args)
-	} else if function == "updateShipmentStatus" {
-		return s.updateShipmentStatus(APIstub, args)
+	} else if function == "updateStatus" {
+		return s.updateStatus(APIstub, args)
 	}else if function == "queryAllShips" {
 		return s.queryAllShips(APIstub)
 	}
@@ -142,7 +144,10 @@ func (s *SmartContract) createShipment(APIstub shim.ChaincodeStubInterface, args
 	stringID = strconv.Itoa(id)
 	shipID = shipString + stringID
 
-	var ship = Shipment{Id: shipID,CreaterId: args[0], StatusUpdateTime: args[1], StatusChanger: args[2], Carrier: args[3], Recipient: args[4], Retailer: args[5], PickUp: args[6], Destination: args[7], Status: "Created", ContentList: args[8], Space: args[9], Price: args[10]}
+	currentTime := time.Now().String()
+
+
+	var ship = Shipment{Id: shipID,CreaterId: args[0], Status: "Created",  StatusUpdateTime: currentTime, StatusChanger: args[0], Carrier: args[1], Recipient: args[2], Retailer: args[3], Price: args[4], PickUp: args[5], Destination: args[6], ContentList: args[7], Space: args[8], Startpoint: args[9], Endpoint:args[10]}
 
 	shipAsBytes , err := json.Marshal(ship);
 	if err != nil {
@@ -156,10 +161,9 @@ func (s *SmartContract) createShipment(APIstub shim.ChaincodeStubInterface, args
 	}
 }
 
-func (s *SmartContract) updateShipmentStatus(APIstub shim.ChaincodeStubInterface, args []string) peer.Response {
-
-	if len(args) != 2 {
-		return shim.Error("Incorrect number of arguments. Expecting 2")
+func (s *SmartContract) updateStatus(APIstub shim.ChaincodeStubInterface, args []string) peer.Response  {
+	if len(args) != 3 {
+		return shim.Error("Incorrect number of arguments. Expecting 3")
 	}
 	shipID := args[0]
 	shipAsBytes , err := APIstub.GetState(shipID)
@@ -169,10 +173,16 @@ func (s *SmartContract) updateShipmentStatus(APIstub shim.ChaincodeStubInterface
 
 	ship := Shipment{}
 
-	json.Unmarshal(shipAsBytes, &ship)
-
 	ship.Status = args[1]
+	ship.StatusUpdateTime = time.Now().String()
+	ship.StatusChanger = args[2]
+	ship.Carrier = args[2]
+	if  args[3] == ""{
+		ship.Space = args[3]
+	}
 
+
+	json.Unmarshal(shipAsBytes, &ship)
 	shipAsBytes, err = json.Marshal(ship)
 	if err != nil {
 		return shim.Error(fmt.Sprintf("Couldn't marshal Shipment. Error: %s " , err.Error()))
