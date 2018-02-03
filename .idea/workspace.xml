@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="395ac971-c16b-4a42-b198-ca3d6dac399a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/chaincode_car_example" afterPath="$PROJECT_DIR$/chaincode_car_example" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chaincode_car_example.go" afterPath="$PROJECT_DIR$/src/chaincode_car_example.go" />
     </list>
@@ -29,10 +28,20 @@
       <file leaf-file-name="chaincode_car_example.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/chaincode_car_example.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.62086093">
-              <caret line="96" column="31" selection-start-line="0" selection-start-column="0" selection-end-line="290" selection-end-column="1" />
+            <state vertical-scroll-proportion="0.7764901">
+              <caret line="338" column="109" selection-start-line="0" selection-start-column="0" selection-end-line="375" selection-end-column="1" />
               <folding>
                 <element signature="e#1120#1281#0" expanded="true" />
+                <element signature="n#!!block;n#Init#0" expanded="false" />
+                <element signature="n#!!block;n#Invoke#0" expanded="false" />
+                <element signature="n#!!block;n#initLedger#0" expanded="false" />
+                <element signature="n#!!block;n#createShipment#0" expanded="false" />
+                <element signature="n#!!block;n#updateStatus#0" expanded="false" />
+                <element signature="n#!!block;n#queryAllShips#0" expanded="false" />
+                <element signature="n#!!block;n#queryId#0" expanded="false" />
+                <element signature="n#!!block;n#createTransaction#0" expanded="false" />
+                <element signature="n#!!block;n#updateTransaction#0" expanded="false" />
+                <element signature="n#!!block;n#main#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -620,12 +629,12 @@
       <workItem from="1517608337663" duration="154000" />
       <workItem from="1517608540210" duration="832000" />
       <workItem from="1517609644574" duration="401000" />
-      <workItem from="1517610089367" duration="13492000" />
+      <workItem from="1517610089367" duration="15830000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14879000" />
+    <option name="totallyTimeSpent" value="17217000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -668,7 +677,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -679,6 +688,16 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#1120#1281#0" expanded="true" />
+            <element signature="n#!!block;n#Init#0" expanded="false" />
+            <element signature="n#!!block;n#Invoke#0" expanded="false" />
+            <element signature="n#!!block;n#initLedger#0" expanded="false" />
+            <element signature="n#!!block;n#createShipment#0" expanded="false" />
+            <element signature="n#!!block;n#updateStatus#0" expanded="false" />
+            <element signature="n#!!block;n#queryAllShips#0" expanded="false" />
+            <element signature="n#!!block;n#queryId#0" expanded="false" />
+            <element signature="n#!!block;n#createTransaction#0" expanded="false" />
+            <element signature="n#!!block;n#updateTransaction#0" expanded="false" />
+            <element signature="n#!!block;n#main#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -689,6 +708,16 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#1120#1281#0" expanded="true" />
+            <element signature="n#!!block;n#Init#0" expanded="false" />
+            <element signature="n#!!block;n#Invoke#0" expanded="false" />
+            <element signature="n#!!block;n#initLedger#0" expanded="false" />
+            <element signature="n#!!block;n#createShipment#0" expanded="false" />
+            <element signature="n#!!block;n#updateStatus#0" expanded="false" />
+            <element signature="n#!!block;n#queryAllShips#0" expanded="false" />
+            <element signature="n#!!block;n#queryId#0" expanded="false" />
+            <element signature="n#!!block;n#createTransaction#0" expanded="false" />
+            <element signature="n#!!block;n#updateTransaction#0" expanded="false" />
+            <element signature="n#!!block;n#main#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -699,16 +728,36 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#1120#1281#0" expanded="true" />
+            <element signature="n#!!block;n#Init#0" expanded="false" />
+            <element signature="n#!!block;n#Invoke#0" expanded="false" />
+            <element signature="n#!!block;n#initLedger#0" expanded="false" />
+            <element signature="n#!!block;n#createShipment#0" expanded="false" />
+            <element signature="n#!!block;n#updateStatus#0" expanded="false" />
+            <element signature="n#!!block;n#queryAllShips#0" expanded="false" />
+            <element signature="n#!!block;n#queryId#0" expanded="false" />
+            <element signature="n#!!block;n#createTransaction#0" expanded="false" />
+            <element signature="n#!!block;n#updateTransaction#0" expanded="false" />
+            <element signature="n#!!block;n#main#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/chaincode_car_example.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.62086093">
-          <caret line="96" column="31" selection-start-line="0" selection-start-column="0" selection-end-line="290" selection-end-column="1" />
+        <state vertical-scroll-proportion="0.7764901">
+          <caret line="338" column="109" selection-start-line="0" selection-start-column="0" selection-end-line="375" selection-end-column="1" />
           <folding>
             <element signature="e#1120#1281#0" expanded="true" />
+            <element signature="n#!!block;n#Init#0" expanded="false" />
+            <element signature="n#!!block;n#Invoke#0" expanded="false" />
+            <element signature="n#!!block;n#initLedger#0" expanded="false" />
+            <element signature="n#!!block;n#createShipment#0" expanded="false" />
+            <element signature="n#!!block;n#updateStatus#0" expanded="false" />
+            <element signature="n#!!block;n#queryAllShips#0" expanded="false" />
+            <element signature="n#!!block;n#queryId#0" expanded="false" />
+            <element signature="n#!!block;n#createTransaction#0" expanded="false" />
+            <element signature="n#!!block;n#updateTransaction#0" expanded="false" />
+            <element signature="n#!!block;n#main#0" expanded="false" />
           </folding>
         </state>
       </provider>

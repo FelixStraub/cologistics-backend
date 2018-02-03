@@ -73,7 +73,14 @@ type IdHolder struct {
 	Name string `json:"name"`
 }
 
-
+type Transaction struct {
+	Id string `json:"id"`
+	Receiver string `json:"receiver"`
+	Sender string `json:"sender"`
+	Amount string `json:"amount"`
+	Type string `json:"type"`
+	ShipId string `json:"ship_id"`
+}
 
 /*
  * The Init method is called when the Smart Contract "fabcar" is instantiated by the blockchain network
@@ -146,8 +153,8 @@ func (s *SmartContract) createShipment(APIstub shim.ChaincodeStubInterface, args
 	startKey := "SHIP000"
 	endKey := "SHIP999"
 
-	if len(args) != 11 {
-		return shim.Error("Incorrect number of arguments. Expecting 11")
+	if len(args) != 10 {
+		return shim.Error("Incorrect number of arguments. Expecting 10")
 	}
 	resultsIterator, err := APIstub.GetStateByRange(startKey, endKey)
 	if err != nil {
@@ -200,7 +207,7 @@ func (s *SmartContract) updateStatus(APIstub shim.ChaincodeStubInterface, args [
 	}
 
 	ship := Shipment{}
-
+	json.Unmarshal(shipAsBytes, &ship)
 	ship.Status = args[1]
 	ship.StatusUpdateTime = time.Now().String()
 	ship.StatusChanger = args[2]
@@ -211,8 +218,6 @@ func (s *SmartContract) updateStatus(APIstub shim.ChaincodeStubInterface, args [
 		ship.Space = args[3]
 	}
 
-
-	json.Unmarshal(shipAsBytes, &ship)
 	shipAsBytes, err = json.Marshal(ship)
 	if err != nil {
 		return shim.Error(fmt.Sprintf("Couldn't marshal Shipment. Error: %s " , err.Error()))
@@ -224,7 +229,6 @@ func (s *SmartContract) updateStatus(APIstub shim.ChaincodeStubInterface, args [
 		return shim.Success(shipAsBytes)
 	}
 }
-
 
 func (s *SmartContract) queryAllShips(APIstub shim.ChaincodeStubInterface) peer.Response {
 
@@ -278,6 +282,87 @@ func (s *SmartContract) queryId(APIstub shim.ChaincodeStubInterface, args []stri
 	idAsBytes,_ := APIstub.GetState(args[0])
 
 	return shim.Success(idAsBytes)
+}
+
+func (s *SmartContract) createTransaction (APIstub shim.ChaincodeStubInterface, args []string) peer.Response {
+
+	var id int = 0
+	var transString string = "TRANS"
+	var transID string = ""
+	var stringID string = ""
+
+
+	startKey := "TRANS000"
+	endKey := "TRANS999"
+
+	if len(args) != 5 {
+		return shim.Error("Incorrect number of arguments. Expecting 5")
+	}
+	resultsIterator, err := APIstub.GetStateByRange(startKey, endKey)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	defer resultsIterator.Close()
+
+	for resultsIterator.HasNext() {
+		queryResponse, err := resultsIterator.Next()
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		fmt.Printf(string(queryResponse.Key))
+		id = id + 1
+	}
+	if id < 10 {
+		transString = "TRANS00"
+	} else if id < 100 {
+		transString = "TRANS0"
+	}
+
+	stringID = strconv.Itoa(id)
+	transID = transString + stringID
+
+
+	var trans = Transaction{Id:transID, Amount: args[0], Receiver: args[1], Sender: args[2], ShipId: args[3], Type: args[4]}
+
+	transAsBytes , err := json.Marshal(trans);
+	if err != nil {
+		return shim.Error(fmt.Sprintf("Couldn't marshal Transaction. Error: %s " , err.Error()))
+	}
+
+	if err := APIstub.PutState(transID, transAsBytes); err != nil{
+		return shim.Error(err.Error())
+	}else {
+		return shim.Success(transAsBytes)
+	}
+}
+
+func (s *SmartContract) updateTransaction(APIstub shim.ChaincodeStubInterface, args []string) peer.Response  {
+
+	if len(args) != 2 {
+		return shim.Error("Incorrect number of arguments. Expecting 2")
+	}
+	transID := args[0]
+	transAsBytes , err := APIstub.GetState(transID)
+	if err != nil {
+		return shim.Error(fmt.Sprintf("Couldn't find Transaction. Error: %s " , err.Error()))
+	}
+
+	trans := Transaction{}
+	json.Unmarshal(transAsBytes, &trans)
+
+	trans.Receiver = args[1]
+
+
+	transAsBytes, err = json.Marshal(trans)
+	if err != nil {
+		return shim.Error(fmt.Sprintf("Couldn't marshal Transaction. Error: %s " , err.Error()))
+	}
+
+	if err := APIstub.PutState(transID, transAsBytes); err != nil{
+		return shim.Error(err.Error())
+	}else {
+		return shim.Success(transAsBytes)
+	}
 }
 
 // The main function is only relevant in unit test mode. Only included here for completeness.
