@@ -390,45 +390,38 @@ func (s *SmartContract) updateTransaction(APIstub shim.ChaincodeStubInterface, a
 	}
 }
 
-func (s *SmartContract) queryTrans(APIstub shim.ChaincodeStubInterface, shipID string, typ string) (*Transaction, string){
+func (s *SmartContract) queryTrans(APIstub shim.ChaincodeStubInterface, shipID string, typ string) *Transaction{
 	startKey := "TRANS000"
 	endKey := "TRANS999"
 
 	resultsIterator, err := APIstub.GetStateByRange(startKey, endKey)
 	if err != nil {
-		return nil, "Didn't find resultsIterator"
+		return nil
 	}
 	defer resultsIterator.Close()
 
 	if resultsIterator.HasNext() != true {
-		return nil, "Didn't find HasNext"
+		return nil
 	}
 	trans := new(Transaction)
 	for resultsIterator.HasNext() {
 		queryResponse, err := resultsIterator.Next()
 		if err != nil {
-			return nil, "Didn't find queryResponse"
+			return nil
 		}
-		return nil, "Went in the for-loop and straight back"+queryResponse.String()
-		responseAsByte,err := json.Marshal(queryResponse)
+
+		err = json.Unmarshal(queryResponse.Value, trans)
 		if err != nil {
-			return nil, "responseAsByte empty"
-		}
-
-		err = json.Unmarshal(responseAsByte, trans)
-		if err != nil {
-			return nil, "Unmarshal didn't work"
+			return nil
 		}
 
 
-		if trans.ShipId == shipID{
-			if trans.Type == typ {
-				return trans, "All good"
-			}
-			return nil, "Type not found. ShipId: " + trans.ShipId
+		if trans.ShipId == shipID && trans.Type == typ{
+				return trans
+
 		}
 	}
-	return nil, "Didn't match. ShipId: " + trans.ShipId + "Type: "+ trans.Type
+	return nil
 }
 
 func (s *SmartContract) changeBalance(APIstub shim.ChaincodeStubInterface, trans Transaction) peer.Response{
