@@ -348,6 +348,10 @@ func (s *SmartContract) createTransaction (APIstub shim.ChaincodeStubInterface, 
 
 	var trans = Transaction{Id:transID, Amount: args.Amount, Receiver: args.Receiver, Sender: args.Sender, ShipId: args.ShipID, Type: args.Type}
 
+
+	if trans.Receiver != "" {
+		s.changeBalance(APIstub, trans)
+	}
 	transAsBytes , err := json.Marshal(trans);
 	if err != nil {
 		return shim.Error(fmt.Sprintf("Couldn't marshal Transaction. Error: %s " , err.Error()))
@@ -418,7 +422,70 @@ func (s *SmartContract) queryTrans(APIstub shim.ChaincodeStubInterface, shipID s
 	return nil
 }
 
-// The main function is only relevant in unit test mode. Only included here for completeness.
+func (s *SmartContract) changeBalance(APIstub shim.ChaincodeStubInterface, trans Transaction) peer.Response{
+	startKey := "ID0"
+	endKey := "ID999"
+
+	resultsIterator, err := APIstub.GetStateByRange(startKey, endKey)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	defer resultsIterator.Close()
+
+	if resultsIterator.HasNext() != true {
+		return shim.Error(err.Error())
+	}
+
+	for resultsIterator.HasNext() {
+		queryResponse, err := resultsIterator.Next()
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		responseAsByte,_ := json.Marshal(queryResponse)
+		idHolder := new(IdHolder)
+		json.Unmarshal(responseAsByte, &idHolder)
+
+
+		if idHolder.Id == trans.Receiver{
+
+			bal := idHolder.Balance
+
+			balFl, _ :=  strconv.ParseFloat(bal, 64)
+
+			amountFl, _ := strconv.ParseFloat(trans.Amount, 64)
+
+			balFl = balFl + amountFl
+
+			idHolder.Balance = strconv.FormatFloat(balFl, 'f', 2, 64)
+
+			idHolderAsByte, _ := json.Marshal(idHolder)
+
+			APIstub.PutState(idHolder.Id, idHolderAsByte)
+
+		}
+		if idHolder.Id == trans.Sender {
+			bal := idHolder.Balance
+
+			balFl, _ :=  strconv.ParseFloat(bal, 64)
+
+			amountFl, _ := strconv.ParseFloat(trans.Amount, 64)
+
+			balFl = balFl - amountFl
+
+			idHolder.Balance = strconv.FormatFloat(balFl, 'f', 2, 64)
+
+			idHolderAsByte, _ := json.Marshal(idHolder)
+
+			APIstub.PutState(idHolder.Id, idHolderAsByte)
+		}
+
+	}
+	return shim.Success(nil)
+}
+
+
+
+/// / The main function is only relevant in unit test mode. Only included here for completeness.
 func main() {
 
 	// Create a new Smart Contract

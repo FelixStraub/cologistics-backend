@@ -29,14 +29,15 @@
       <file leaf-file-name="chaincode_car_example.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/chaincode_car_example.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.489603">
-              <caret line="90" column="1" selection-start-line="0" selection-start-column="0" selection-end-line="428" selection-end-column="1" />
+            <state vertical-scroll-proportion="0.75165564">
+              <caret line="484" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="495" selection-end-column="1" />
               <folding>
                 <element signature="e#1120#1281#0" expanded="true" />
                 <element signature="e#1366#1447#0" expanded="false" />
                 <element signature="e#1561#2114#0" expanded="false" />
                 <element signature="e#2130#2223#0" expanded="false" />
                 <element signature="e#2242#2431#0" expanded="false" />
+                <element signature="e#2448#2614#0" expanded="false" />
                 <element signature="n#!!block;n#Invoke#0" expanded="false" />
                 <element signature="n#!!block;n#initLedger#0" expanded="false" />
                 <element signature="n#!!block;n#createShipment#0" expanded="false" />
@@ -634,12 +635,12 @@
       <workItem from="1517608337663" duration="154000" />
       <workItem from="1517608540210" duration="832000" />
       <workItem from="1517609644574" duration="401000" />
-      <workItem from="1517610089367" duration="21771000" />
+      <workItem from="1517610089367" duration="23908000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23158000" />
+    <option name="totallyTimeSpent" value="25295000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -651,8 +652,8 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32891566" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23855421" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32891566" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23855421" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -682,7 +683,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="4" />
+      <option name="time" value="6" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -697,6 +698,7 @@
             <element signature="e#1561#2114#0" expanded="false" />
             <element signature="e#2130#2223#0" expanded="false" />
             <element signature="e#2242#2431#0" expanded="false" />
+            <element signature="e#2448#2614#0" expanded="false" />
             <element signature="n#!!block;n#Invoke#0" expanded="false" />
             <element signature="n#!!block;n#initLedger#0" expanded="false" />
             <element signature="n#!!block;n#createShipment#0" expanded="false" />
@@ -721,6 +723,7 @@
             <element signature="e#1561#2114#0" expanded="false" />
             <element signature="e#2130#2223#0" expanded="false" />
             <element signature="e#2242#2431#0" expanded="false" />
+            <element signature="e#2448#2614#0" expanded="false" />
             <element signature="n#!!block;n#Invoke#0" expanded="false" />
             <element signature="n#!!block;n#initLedger#0" expanded="false" />
             <element signature="n#!!block;n#createShipment#0" expanded="false" />
@@ -745,6 +748,7 @@
             <element signature="e#1561#2114#0" expanded="false" />
             <element signature="e#2130#2223#0" expanded="false" />
             <element signature="e#2242#2431#0" expanded="false" />
+            <element signature="e#2448#2614#0" expanded="false" />
             <element signature="n#!!block;n#Invoke#0" expanded="false" />
             <element signature="n#!!block;n#initLedger#0" expanded="false" />
             <element signature="n#!!block;n#createShipment#0" expanded="false" />
@@ -769,14 +773,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/chaincode_car_example.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.489603">
-          <caret line="90" column="1" selection-start-line="0" selection-start-column="0" selection-end-line="428" selection-end-column="1" />
+        <state vertical-scroll-proportion="0.75165564">
+          <caret line="484" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="495" selection-end-column="1" />
           <folding>
             <element signature="e#1120#1281#0" expanded="true" />
             <element signature="e#1366#1447#0" expanded="false" />
             <element signature="e#1561#2114#0" expanded="false" />
             <element signature="e#2130#2223#0" expanded="false" />
             <element signature="e#2242#2431#0" expanded="false" />
+            <element signature="e#2448#2614#0" expanded="false" />
             <element signature="n#!!block;n#Invoke#0" expanded="false" />
             <element signature="n#!!block;n#initLedger#0" expanded="false" />
             <element signature="n#!!block;n#createShipment#0" expanded="false" />
