@@ -29,14 +29,14 @@ package main
  * 2 specific Hyperledger Fabric specific libraries for Smart Contracts
  */
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-	"strconv"
+"bytes"
+"encoding/json"
+"fmt"
+"strconv"
 
-	"github.com/hyperledger/fabric/core/chaincode/shim"
-	"github.com/hyperledger/fabric/protos/peer"
-	"time"
+"github.com/hyperledger/fabric/core/chaincode/shim"
+"github.com/hyperledger/fabric/protos/peer"
+"time"
 )
 
 // Define the Smart Contract structure
@@ -153,8 +153,8 @@ func (s *SmartContract) createShipment(APIstub shim.ChaincodeStubInterface, args
 	startKey := "SHIP000"
 	endKey := "SHIP999"
 
-	if len(args) != 10 {
-		return shim.Error("Incorrect number of arguments. Expecting 10")
+	if len(args) != 11 {
+		return shim.Error("Incorrect number of arguments. Expecting 11")
 	}
 	resultsIterator, err := APIstub.GetStateByRange(startKey, endKey)
 	if err != nil {
