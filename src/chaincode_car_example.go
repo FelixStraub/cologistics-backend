@@ -29,14 +29,14 @@ package main
  * 2 specific Hyperledger Fabric specific libraries for Smart Contracts
  */
 import (
-"bytes"
-"encoding/json"
-"fmt"
-"strconv"
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"strconv"
 
-"github.com/hyperledger/fabric/core/chaincode/shim"
-"github.com/hyperledger/fabric/protos/peer"
-"time"
+	"github.com/hyperledger/fabric/core/chaincode/shim"
+	"github.com/hyperledger/fabric/protos/peer"
+	"time"
 )
 
 // Define the Smart Contract structure
@@ -82,6 +82,14 @@ type Transaction struct {
 	ShipId string `json:"ship_id"`
 }
 
+type TransArgs struct {
+	ShipID string `json:"ship_id"`
+	Sender string `json:"sender"`
+	Amount string `json:"amount"`
+	Type string `json:"type"`
+	Receiver string `json:"receiver"`
+}
+
 /*
  * The Init method is called when the Smart Contract "fabcar" is instantiated by the blockchain network
  * Best practice is to have any Ledger initialization in separate function -- see initLedger()
@@ -117,12 +125,12 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) peer.Respons
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) peer.Response {
 
 	idHolders := []IdHolder{
-		IdHolder{Id:"1", Balance:"500", Name: "Philipp der Erste"},
-		IdHolder{Id:"2", Balance:"500", Name: "Philipp der Zweite"},
-		IdHolder{Id:"3", Balance:"500", Name: "Philipp der Dritte"},
-		IdHolder{Id:"4", Balance:"500", Name: "Philipp der Vierte"},
-		IdHolder{Id:"5", Balance:"500", Name: "Philipp der Erste Junior"},
-		IdHolder{Id:"6", Balance:"500", Name: "Philipp S."},
+		IdHolder{Id:"1", Balance:"98053", Name: "Philipp der Erste"},
+		IdHolder{Id:"2", Balance:"20", Name: "Philipp der Zweite"},
+		IdHolder{Id:"3", Balance:"5534", Name: "Philipp der Dritte"},
+		IdHolder{Id:"4", Balance:"2366", Name: "Philipp der Vierte"},
+		IdHolder{Id:"5", Balance:"334", Name: "Philipp der Erste Junior"},
+		IdHolder{Id:"6", Balance:"542", Name: "Philipp S."},
 
 	}
 
@@ -197,8 +205,8 @@ func (s *SmartContract) createShipment(APIstub shim.ChaincodeStubInterface, args
 }
 
 func (s *SmartContract) updateStatus(APIstub shim.ChaincodeStubInterface, args []string) peer.Response  {
-	if len(args) != 3 {
-		return shim.Error("Incorrect number of arguments. Expecting 3")
+	if len(args) != 4 {
+		return shim.Error("Incorrect number of arguments. Expecting 4")
 	}
 	shipID := args[0]
 	shipAsBytes , err := APIstub.GetState(shipID)
@@ -209,6 +217,25 @@ func (s *SmartContract) updateStatus(APIstub shim.ChaincodeStubInterface, args [
 	ship := Shipment{}
 	json.Unmarshal(shipAsBytes, &ship)
 	ship.Status = args[1]
+	if ship.Status == "Accepted"{
+		transArgs := TransArgs{Receiver: "", ShipID: ship.Id, Sender: ship.Carrier, Amount: ship.Price, Type: "deposite"}
+		s.createTransaction(APIstub, transArgs)
+	} else if ship.Status == "Approved"{
+		transArgs := TransArgs{Receiver: ship.Carrier, ShipID: ship.Id, Sender: ship.Retailer, Amount: ship.Price, Type: "payment"}
+		s.createTransaction(APIstub, transArgs)
+		trans := s.queryTrans(APIstub, ship.Id, "deposite")
+		if trans == nil {
+			return shim.Error("No Transaction found")
+		}
+		s.updateTransaction(APIstub, transArgs, trans.Id)
+	} else if ship.Status == "not delivered" {
+		transArgs := TransArgs{Receiver: ship.Retailer, ShipID: ship.Id, Sender: ship.Carrier, Amount: ship.Price, Type: "deposite"}
+		trans := s.queryTrans(APIstub, ship.Id, "deposite")
+		if trans == nil {
+			return shim.Error("No Transaction found")
+		}
+		s.updateTransaction(APIstub, transArgs, trans.Id)
+	}
 	ship.StatusUpdateTime = time.Now().String()
 	ship.StatusChanger = args[2]
 	if ship.Carrier == "" {
@@ -284,7 +311,7 @@ func (s *SmartContract) queryId(APIstub shim.ChaincodeStubInterface, args []stri
 	return shim.Success(idAsBytes)
 }
 
-func (s *SmartContract) createTransaction (APIstub shim.ChaincodeStubInterface, args []string) peer.Response {
+func (s *SmartContract) createTransaction (APIstub shim.ChaincodeStubInterface, args TransArgs) peer.Response {
 
 	var id int = 0
 	var transString string = "TRANS"
@@ -295,9 +322,6 @@ func (s *SmartContract) createTransaction (APIstub shim.ChaincodeStubInterface, 
 	startKey := "TRANS000"
 	endKey := "TRANS999"
 
-	if len(args) != 5 {
-		return shim.Error("Incorrect number of arguments. Expecting 5")
-	}
 	resultsIterator, err := APIstub.GetStateByRange(startKey, endKey)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -322,7 +346,7 @@ func (s *SmartContract) createTransaction (APIstub shim.ChaincodeStubInterface, 
 	transID = transString + stringID
 
 
-	var trans = Transaction{Id:transID, Amount: args[0], Receiver: args[1], Sender: args[2], ShipId: args[3], Type: args[4]}
+	var trans = Transaction{Id:transID, Amount: args.Amount, Receiver: args.Receiver, Sender: args.Sender, ShipId: args.ShipID, Type: args.Type}
 
 	transAsBytes , err := json.Marshal(trans);
 	if err != nil {
@@ -336,12 +360,9 @@ func (s *SmartContract) createTransaction (APIstub shim.ChaincodeStubInterface, 
 	}
 }
 
-func (s *SmartContract) updateTransaction(APIstub shim.ChaincodeStubInterface, args []string) peer.Response  {
+func (s *SmartContract) updateTransaction(APIstub shim.ChaincodeStubInterface, args TransArgs, id string) peer.Response  {
 
-	if len(args) != 2 {
-		return shim.Error("Incorrect number of arguments. Expecting 2")
-	}
-	transID := args[0]
+	transID := id
 	transAsBytes , err := APIstub.GetState(transID)
 	if err != nil {
 		return shim.Error(fmt.Sprintf("Couldn't find Transaction. Error: %s " , err.Error()))
@@ -350,7 +371,7 @@ func (s *SmartContract) updateTransaction(APIstub shim.ChaincodeStubInterface, a
 	trans := Transaction{}
 	json.Unmarshal(transAsBytes, &trans)
 
-	trans.Receiver = args[1]
+	trans.Receiver = args.Receiver
 
 
 	transAsBytes, err = json.Marshal(trans)
@@ -363,6 +384,38 @@ func (s *SmartContract) updateTransaction(APIstub shim.ChaincodeStubInterface, a
 	}else {
 		return shim.Success(transAsBytes)
 	}
+}
+
+func (s *SmartContract) queryTrans(APIstub shim.ChaincodeStubInterface, shipID string, typ string) *Transaction{
+	startKey := "TRANS000"
+	endKey := "TRANS999"
+
+	resultsIterator, err := APIstub.GetStateByRange(startKey, endKey)
+	if err != nil {
+		return nil
+	}
+	defer resultsIterator.Close()
+
+	if resultsIterator.HasNext() != true {
+		return nil
+	}
+
+	for resultsIterator.HasNext() {
+		queryResponse, err := resultsIterator.Next()
+		if err != nil {
+			return nil
+		}
+		responseAsByte,_ := json.Marshal(queryResponse)
+		trans := new(Transaction)
+		json.Unmarshal(responseAsByte, &trans)
+
+
+		if trans.ShipId == shipID && trans.Type == typ{
+
+			return trans
+		}
+	}
+	return nil
 }
 
 // The main function is only relevant in unit test mode. Only included here for completeness.
