@@ -214,33 +214,33 @@ func (s *SmartContract) updateStatus(APIstub shim.ChaincodeStubInterface, args [
 		return shim.Error(fmt.Sprintf("Couldn't find Shipment. Error: %s " , err.Error()))
 	}
 
-	ship := Shipment{}
-	json.Unmarshal(shipAsBytes, &ship)
+	ship := new(Shipment)
+	err = json.Unmarshal(shipAsBytes, ship)
 	ship.Status = args[1]
+	if ship.Carrier == "" {
+		ship.Carrier = args[2]
+	}
 	if ship.Status == "Accepted"{
 		transArgs := TransArgs{Receiver: "", ShipID: ship.Id, Sender: ship.Carrier, Amount: ship.Price, Type: "deposite"}
 		s.createTransaction(APIstub, transArgs)
 	} else if ship.Status == "Approved"{
 		transArgs := TransArgs{Receiver: ship.Carrier, ShipID: ship.Id, Sender: ship.Retailer, Amount: ship.Price, Type: "payment"}
 		s.createTransaction(APIstub, transArgs)
-		trans := s.queryTrans(APIstub, ship.Id, "deposite")
+		trans, err := s.queryTrans(APIstub, ship.Id, "deposite")
 		if trans == nil {
-			return shim.Error("No Transaction found")
+			return shim.Error(err)
 		}
 		s.updateTransaction(APIstub, transArgs, trans.Id)
 	} else if ship.Status == "not delivered" {
 		transArgs := TransArgs{Receiver: ship.Retailer, ShipID: ship.Id, Sender: ship.Carrier, Amount: ship.Price, Type: "deposite"}
-		trans := s.queryTrans(APIstub, ship.Id, "deposite")
+		trans, err := s.queryTrans(APIstub, ship.Id, "deposite")
 		if trans == nil {
-			return shim.Error("No Transaction found")
+			return shim.Error(err)
 		}
 		s.updateTransaction(APIstub, transArgs, trans.Id)
 	}
 	ship.StatusUpdateTime = time.Now().String()
 	ship.StatusChanger = args[2]
-	if ship.Carrier == "" {
-		ship.Carrier = args[2]
-	}
 	if  args[3] == ""{
 		ship.Space = args[3]
 	}
@@ -372,8 +372,8 @@ func (s *SmartContract) updateTransaction(APIstub shim.ChaincodeStubInterface, a
 		return shim.Error(fmt.Sprintf("Couldn't find Transaction. Error: %s " , err.Error()))
 	}
 
-	trans := Transaction{}
-	json.Unmarshal(transAsBytes, &trans)
+	trans := new(Transaction)
+	json.Unmarshal(transAsBytes, trans)
 
 	trans.Receiver = args.Receiver
 
@@ -390,36 +390,45 @@ func (s *SmartContract) updateTransaction(APIstub shim.ChaincodeStubInterface, a
 	}
 }
 
-func (s *SmartContract) queryTrans(APIstub shim.ChaincodeStubInterface, shipID string, typ string) *Transaction{
+func (s *SmartContract) queryTrans(APIstub shim.ChaincodeStubInterface, shipID string, typ string) (*Transaction, string){
 	startKey := "TRANS000"
 	endKey := "TRANS999"
 
 	resultsIterator, err := APIstub.GetStateByRange(startKey, endKey)
 	if err != nil {
-		return nil
+		return nil, "Didn't find resultsIterator"
 	}
 	defer resultsIterator.Close()
 
 	if resultsIterator.HasNext() != true {
-		return nil
+		return nil, "Didn't find HasNext"
 	}
-
+	trans := new(Transaction)
 	for resultsIterator.HasNext() {
 		queryResponse, err := resultsIterator.Next()
 		if err != nil {
-			return nil
+			return nil, "Didn't find queryResponse"
 		}
-		responseAsByte,_ := json.Marshal(queryResponse)
-		trans := new(Transaction)
-		json.Unmarshal(responseAsByte, &trans)
+		return nil, "Went in the for-loop and straight back"+queryResponse.String()
+		responseAsByte,err := json.Marshal(queryResponse)
+		if err != nil {
+			return nil, "responseAsByte empty"
+		}
+
+		err = json.Unmarshal(responseAsByte, trans)
+		if err != nil {
+			return nil, "Unmarshal didn't work"
+		}
 
 
-		if trans.ShipId == shipID && trans.Type == typ{
-
-			return trans
+		if trans.ShipId == shipID{
+			if trans.Type == typ {
+				return trans, "All good"
+			}
+			return nil, "Type not found. ShipId: " + trans.ShipId
 		}
 	}
-	return nil
+	return nil, "Didn't match. ShipId: " + trans.ShipId + "Type: "+ trans.Type
 }
 
 func (s *SmartContract) changeBalance(APIstub shim.ChaincodeStubInterface, trans Transaction) peer.Response{
@@ -443,7 +452,7 @@ func (s *SmartContract) changeBalance(APIstub shim.ChaincodeStubInterface, trans
 		}
 		responseAsByte,_ := json.Marshal(queryResponse)
 		idHolder := new(IdHolder)
-		json.Unmarshal(responseAsByte, &idHolder)
+		json.Unmarshal(responseAsByte, idHolder)
 
 
 		if idHolder.Id == trans.Receiver{
