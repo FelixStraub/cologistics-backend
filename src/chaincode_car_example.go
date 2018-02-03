@@ -88,6 +88,8 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) peer.Respons
 		return s.createShipment(APIstub, args)
 	} else if function == "updateShipmentStatus" {
 		return s.updateShipmentStatus(APIstub, args)
+	}else if function == "queryAllShips" {
+		return s.queryAllShips(APIstub)
 	}
 
 	return shim.Error("Invalid Smart Contract function name.")
