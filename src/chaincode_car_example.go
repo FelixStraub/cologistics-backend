@@ -67,6 +67,12 @@ type Shipment struct {
 	Endpoint string `json:"endpoint"`
 }
 
+type IdHolder struct {
+	Id string `json:"id"`
+	Balance string `json:"balance"`
+	Name string `json:"name"`
+}
+
 
 
 /*
@@ -92,19 +98,41 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) peer.Respons
 		return s.updateStatus(APIstub, args)
 	}else if function == "queryAllShips" {
 		return s.queryAllShips(APIstub)
+	}else if function == "queryId" {
+		return s.queryId(APIstub, args)
+	}else if function == "initLedger" {
+		return s.initLedger(APIstub)
 	}
 
 	return shim.Error("Invalid Smart Contract function name.")
 }
 
-func (s *SmartContract) queryCar(APIstub shim.ChaincodeStubInterface, args []string) peer.Response {
+func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) peer.Response {
 
-	if len(args) != 1 {
-		return shim.Error("Incorrect number of arguments. Expecting 1")
+	idHolders := []IdHolder{
+		IdHolder{Id:"1", Balance:"500", Name: "Philipp der Erste"},
+		IdHolder{Id:"2", Balance:"500", Name: "Philipp der Zweite"},
+		IdHolder{Id:"3", Balance:"500", Name: "Philipp der Dritte"},
+		IdHolder{Id:"4", Balance:"500", Name: "Philipp der Vierte"},
+		IdHolder{Id:"5", Balance:"500", Name: "Philipp der Erste Junior"},
+		IdHolder{Id:"6", Balance:"500", Name: "Philipp S."},
+
 	}
 
-	carAsBytes, _ := APIstub.GetState(args[0])
-	return shim.Success(carAsBytes)
+	i := 0
+	for i < len(idHolders) {
+		idsAsBytes, err := json.Marshal(idHolders[i])
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		APIstub.PutState("ID"+strconv.Itoa(i), idsAsBytes)
+		fmt.Println("Added ", idHolders[i])
+		i = i + 1
+
+	}
+
+
+	return shim.Success(nil)
 }
 
 func (s *SmartContract) createShipment(APIstub shim.ChaincodeStubInterface, args []string) peer.Response {
@@ -176,7 +204,7 @@ func (s *SmartContract) updateStatus(APIstub shim.ChaincodeStubInterface, args [
 	ship.Status = args[1]
 	ship.StatusUpdateTime = time.Now().String()
 	ship.StatusChanger = args[2]
-	if ship.Carrier == nil {
+	if ship.Carrier == "" {
 		ship.Carrier = args[2]
 	}
 	if  args[3] == ""{
@@ -239,6 +267,17 @@ func (s *SmartContract) queryAllShips(APIstub shim.ChaincodeStubInterface) peer.
 	fmt.Printf("- queryAllShipments:\n%s\n", buffer.String())
 
 	return shim.Success(buffer.Bytes())
+}
+
+func (s *SmartContract) queryId(APIstub shim.ChaincodeStubInterface, args []string) peer.Response {
+
+	if len(args) != 1{
+		return shim.Error("Philipp hats verbockt -.-")
+	}
+
+	idAsBytes,_ := APIstub.GetState(args[0])
+
+	return shim.Success(idAsBytes)
 }
 
 // The main function is only relevant in unit test mode. Only included here for completeness.
