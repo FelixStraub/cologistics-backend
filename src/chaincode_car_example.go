@@ -176,7 +176,9 @@ func (s *SmartContract) updateStatus(APIstub shim.ChaincodeStubInterface, args [
 	ship.Status = args[1]
 	ship.StatusUpdateTime = time.Now().String()
 	ship.StatusChanger = args[2]
-	ship.Carrier = args[2]
+	if ship.Carrier == nil {
+		ship.Carrier = args[2]
+	}
 	if  args[3] == ""{
 		ship.Space = args[3]
 	}
