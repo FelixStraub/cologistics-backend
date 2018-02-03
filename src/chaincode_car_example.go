@@ -37,6 +37,7 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"github.com/hyperledger/fabric/protos/peer"
 	"time"
+	"errors"
 )
 
 // Define the Smart Contract structure
@@ -222,20 +223,26 @@ func (s *SmartContract) updateStatus(APIstub shim.ChaincodeStubInterface, args [
 	}
 	if ship.Status == "Accepted"{
 		transArgs := TransArgs{Receiver: "", ShipID: ship.Id, Sender: ship.Carrier, Amount: ship.Price, Type: "deposite"}
-		s.createTransaction(APIstub, transArgs)
+		err =  s.createTransaction(APIstub, transArgs)
+		if err != nil {
+			return shim.Error(err.Error())
+		}
 	} else if ship.Status == "Approved"{
 		transArgs := TransArgs{Receiver: ship.Carrier, ShipID: ship.Id, Sender: ship.Retailer, Amount: ship.Price, Type: "payment"}
-		s.createTransaction(APIstub, transArgs)
-		trans, err := s.queryTrans(APIstub, ship.Id, "deposite")
+		err = s.createTransaction(APIstub, transArgs)
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		trans := s.queryTrans(APIstub, ship.Id, "deposite")
 		if trans == nil {
-			return shim.Error(err)
+			return shim.Error("Alles scheiße!")
 		}
 		s.updateTransaction(APIstub, transArgs, trans.Id)
 	} else if ship.Status == "not delivered" {
 		transArgs := TransArgs{Receiver: ship.Retailer, ShipID: ship.Id, Sender: ship.Carrier, Amount: ship.Price, Type: "deposite"}
-		trans, err := s.queryTrans(APIstub, ship.Id, "deposite")
+		trans := s.queryTrans(APIstub, ship.Id, "deposite")
 		if trans == nil {
-			return shim.Error(err)
+			return shim.Error("Alles kacke!")
 		}
 		s.updateTransaction(APIstub, transArgs, trans.Id)
 	}
@@ -311,7 +318,7 @@ func (s *SmartContract) queryId(APIstub shim.ChaincodeStubInterface, args []stri
 	return shim.Success(idAsBytes)
 }
 
-func (s *SmartContract) createTransaction (APIstub shim.ChaincodeStubInterface, args TransArgs) peer.Response {
+func (s *SmartContract) createTransaction (APIstub shim.ChaincodeStubInterface, args TransArgs) error {
 
 	var id int = 0
 	var transString string = "TRANS"
@@ -324,14 +331,14 @@ func (s *SmartContract) createTransaction (APIstub shim.ChaincodeStubInterface, 
 
 	resultsIterator, err := APIstub.GetStateByRange(startKey, endKey)
 	if err != nil {
-		return shim.Error(err.Error())
+		return err
 	}
 	defer resultsIterator.Close()
 
 	for resultsIterator.HasNext() {
 		queryResponse, err := resultsIterator.Next()
 		if err != nil {
-			return shim.Error(err.Error())
+			return err
 		}
 		fmt.Printf(string(queryResponse.Key))
 		id = id + 1
@@ -350,17 +357,20 @@ func (s *SmartContract) createTransaction (APIstub shim.ChaincodeStubInterface, 
 
 
 	if trans.Receiver != "" {
-		s.changeBalance(APIstub, trans)
+		var argument = s.changeBalance(APIstub, trans)
+		if argument != nil {
+			return argument
+		}
 	}
-	transAsBytes , err := json.Marshal(trans);
+	transAsBytes , err := json.Marshal(trans)
 	if err != nil {
-		return shim.Error(fmt.Sprintf("Couldn't marshal Transaction. Error: %s " , err.Error()))
+		return errors.New(fmt.Sprintf("Couldn't marshal Transaction. Error: %s " , err.Error()))
 	}
 
 	if err := APIstub.PutState(transID, transAsBytes); err != nil{
-		return shim.Error(err.Error())
+		return err
 	}else {
-		return shim.Success(transAsBytes)
+		return nil
 	}
 }
 
@@ -403,13 +413,13 @@ func (s *SmartContract) queryTrans(APIstub shim.ChaincodeStubInterface, shipID s
 	if resultsIterator.HasNext() != true {
 		return nil
 	}
-	trans := new(Transaction)
+
 	for resultsIterator.HasNext() {
 		queryResponse, err := resultsIterator.Next()
 		if err != nil {
 			return nil
 		}
-
+		trans := new(Transaction)
 		err = json.Unmarshal(queryResponse.Value, trans)
 		if err != nil {
 			return nil
@@ -417,44 +427,52 @@ func (s *SmartContract) queryTrans(APIstub shim.ChaincodeStubInterface, shipID s
 
 
 		if trans.ShipId == shipID && trans.Type == typ{
-				return trans
+			return trans
 
 		}
 	}
 	return nil
 }
 
-func (s *SmartContract) changeBalance(APIstub shim.ChaincodeStubInterface, trans Transaction) peer.Response{
+func (s *SmartContract) changeBalance(APIstub shim.ChaincodeStubInterface, trans Transaction) error{
 	startKey := "ID0"
 	endKey := "ID999"
 
 	resultsIterator, err := APIstub.GetStateByRange(startKey, endKey)
 	if err != nil {
-		return shim.Error(err.Error())
+		return errors.New("Blah1")
 	}
 	defer resultsIterator.Close()
 
 	if resultsIterator.HasNext() != true {
-		return shim.Error(err.Error())
+		return errors.New("Blah2")
 	}
 
 	for resultsIterator.HasNext() {
 		queryResponse, err := resultsIterator.Next()
 		if err != nil {
-			return shim.Error(err.Error())
+			return errors.New("Blah3")
 		}
-		responseAsByte,_ := json.Marshal(queryResponse)
 		idHolder := new(IdHolder)
-		json.Unmarshal(responseAsByte, idHolder)
-
-
+		err = json.Unmarshal(queryResponse.Value, idHolder)
+		if err != nil {
+			return errors.New("Blah4")
+		}
+		return errors.New("idHolder.Id: " + idHolder.Id + " trans.Receiver: " + trans.Receiver + " trans.Sender: " + trans.Sender)
 		if idHolder.Id == trans.Receiver{
 
 			bal := idHolder.Balance
 
-			balFl, _ :=  strconv.ParseFloat(bal, 64)
+			balFl, err :=  strconv.ParseFloat(bal, 64)
+			if err != nil {
+				return errors.New("Parsing Error 1")
+			}
 
-			amountFl, _ := strconv.ParseFloat(trans.Amount, 64)
+			amountFl, err := strconv.ParseFloat(trans.Amount, 64)
+
+			if err != nil {
+				return errors.New("Parsing Error 2")
+			}
 
 			balFl = balFl + amountFl
 
@@ -468,9 +486,17 @@ func (s *SmartContract) changeBalance(APIstub shim.ChaincodeStubInterface, trans
 		if idHolder.Id == trans.Sender {
 			bal := idHolder.Balance
 
-			balFl, _ :=  strconv.ParseFloat(bal, 64)
+			balFl, err :=  strconv.ParseFloat(bal, 64)
 
-			amountFl, _ := strconv.ParseFloat(trans.Amount, 64)
+			if err != nil {
+				return errors.New("Parsing Error 3")
+			}
+
+			amountFl, err := strconv.ParseFloat(trans.Amount, 64)
+
+			if err != nil {
+				return errors.New("Parsing Error 4")
+			}
 
 			balFl = balFl - amountFl
 
@@ -480,9 +506,8 @@ func (s *SmartContract) changeBalance(APIstub shim.ChaincodeStubInterface, trans
 
 			APIstub.PutState(idHolder.Id, idHolderAsByte)
 		}
-
 	}
-	return shim.Success(nil)
+	return nil
 }
 
 
