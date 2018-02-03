@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="395ac971-c16b-4a42-b198-ca3d6dac399a" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/cologistics-backend.iml" afterPath="$PROJECT_DIR$/.idea/cologistics-backend.iml" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/GOPATH__cologistics_backend_.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/chaincode_car_example" afterPath="$PROJECT_DIR$/chaincode_car_example" />
       <change beforePath="$PROJECT_DIR$/src/chaincode_car_example.go" afterPath="$PROJECT_DIR$/src/chaincode_car_example.go" />
     </list>
@@ -30,11 +26,10 @@
       <file leaf-file-name="chaincode_car_example.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/chaincode_car_example.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="296">
-              <caret line="363" column="5" lean-forward="true" selection-start-line="363" selection-start-column="5" selection-end-line="363" selection-end-column="5" />
+            <state relative-caret-position="254">
+              <caret line="477" column="18" lean-forward="false" selection-start-line="477" selection-start-column="18" selection-end-line="477" selection-end-column="18" />
               <folding>
                 <element signature="e#1120#1291#0" expanded="true" />
-                <element signature="n#!!block;n#initLedger#0" expanded="false" />
                 <element signature="n#!!block;n#createShipment#0" expanded="false" />
               </folding>
             </state>
@@ -605,12 +600,12 @@
       <workItem from="1517608540210" duration="832000" />
       <workItem from="1517609644574" duration="401000" />
       <workItem from="1517610089367" duration="30511000" />
-      <workItem from="1517695787312" duration="1836000" />
+      <workItem from="1517695787312" duration="5100000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="33734000" />
+    <option name="totallyTimeSpent" value="36998000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1680" height="971" extended-state="0" />
@@ -665,7 +660,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="6" />
+      <option name="time" value="7" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -676,7 +671,6 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#1120#1291#0" expanded="true" />
-            <element signature="n#!!block;n#initLedger#0" expanded="false" />
             <element signature="n#!!block;n#createShipment#0" expanded="false" />
           </folding>
         </state>
@@ -688,7 +682,6 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#1120#1291#0" expanded="true" />
-            <element signature="n#!!block;n#initLedger#0" expanded="false" />
             <element signature="n#!!block;n#createShipment#0" expanded="false" />
           </folding>
         </state>
@@ -700,7 +693,6 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#1120#1291#0" expanded="true" />
-            <element signature="n#!!block;n#initLedger#0" expanded="false" />
             <element signature="n#!!block;n#createShipment#0" expanded="false" />
           </folding>
         </state>
@@ -712,7 +704,6 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#1120#1291#0" expanded="true" />
-            <element signature="n#!!block;n#initLedger#0" expanded="false" />
             <element signature="n#!!block;n#createShipment#0" expanded="false" />
           </folding>
         </state>
@@ -721,11 +712,10 @@
     <entry file="file://$USER_HOME$/go/src/github.com/bitly/go-notify/notify.go" />
     <entry file="file://$PROJECT_DIR$/src/chaincode_car_example.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="363" column="5" lean-forward="true" selection-start-line="363" selection-start-column="5" selection-end-line="363" selection-end-column="5" />
+        <state relative-caret-position="254">
+          <caret line="477" column="18" lean-forward="false" selection-start-line="477" selection-start-column="18" selection-end-line="477" selection-end-column="18" />
           <folding>
             <element signature="e#1120#1291#0" expanded="true" />
-            <element signature="n#!!block;n#initLedger#0" expanded="false" />
             <element signature="n#!!block;n#createShipment#0" expanded="false" />
           </folding>
         </state>

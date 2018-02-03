@@ -126,12 +126,12 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) peer.Respons
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) peer.Response {
 
 	idHolders := []IdHolder{
-		IdHolder{Id:"1", Balance:"98053", Name: "Philipp der Erste"},
-		IdHolder{Id:"2", Balance:"235", Name: "Philipp der Zweite"},
-		IdHolder{Id:"3", Balance:"5534", Name: "Philipp der Dritte"},
-		IdHolder{Id:"4", Balance:"2366", Name: "Philipp der Vierte"},
-		IdHolder{Id:"5", Balance:"334", Name: "Philipp der Erste Junior"},
-		IdHolder{Id:"6", Balance:"542", Name: "Philipp S."},
+		IdHolder{Id:"ID0", Balance:"98053", Name: "Philipp der Erste"},
+		IdHolder{Id:"ID1", Balance:"235", Name: "Philipp der Zweite"},
+		IdHolder{Id:"ID2", Balance:"5534", Name: "Philipp der Dritte"},
+		IdHolder{Id:"ID3", Balance:"2366", Name: "Philipp der Vierte"},
+		IdHolder{Id:"ID4", Balance:"334", Name: "Philipp der Erste Junior"},
+		IdHolder{Id:"ID5", Balance:"542", Name: "Philipp S."},
 
 	}
 
@@ -228,7 +228,7 @@ func (s *SmartContract) updateStatus(APIstub shim.ChaincodeStubInterface, args [
 			return shim.Error(err.Error())
 		}
 	} else if ship.Status == "Approved"{
-		transArgs := TransArgs{Receiver: ship.Carrier, ShipID: ship.Id, Sender: ship.Retailer, Amount: ship.Price, Type: "payment"}
+		transArgs := TransArgs{Receiver: ship.Carrier, ShipID: ship.Id, Sender: ship.Recipient, Amount: ship.Price, Type: "payment"}
 		err = s.createTransaction(APIstub, transArgs)
 		if err != nil {
 			return shim.Error(err.Error())
@@ -427,6 +427,7 @@ func (s *SmartContract) queryTrans(APIstub shim.ChaincodeStubInterface, shipID s
 
 
 		if trans.ShipId == shipID && trans.Type == typ{
+			s.changeBalance(APIstub, *trans)
 			return trans
 
 		}
