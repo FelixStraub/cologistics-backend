@@ -156,43 +156,22 @@ func (s *SmartContract) createShipment(APIstub shim.ChaincodeStubInterface, args
 
 func (s *SmartContract) updateShipmentStatus(APIstub shim.ChaincodeStubInterface, args []string) peer.Response {
 
-	var id int = 0
-	var shipString string = "SHIP"
-	var shipID string = ""
-	var stringID string = ""
-
-
-	startKey := "SHIP000"
-	endKey := "SHIP999"
-
 	if len(args) != 2 {
 		return shim.Error("Incorrect number of arguments. Expecting 2")
 	}
-	resultsIterator, err := APIstub.GetStateByRange(startKey, endKey)
+	shipID := args[0]
+	shipAsBytes , err := APIstub.GetState(shipID)
 	if err != nil {
-		return shim.Error(err.Error())
-	}
-	defer resultsIterator.Close()
-
-	for resultsIterator.HasNext() {
-		queryResponse, err := resultsIterator.Next()
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-		fmt.Printf(string(queryResponse.Key))
-		id = id + 1
-	}
-	if id < 10 {
-		shipString = "SHIP00"
-	} else if id < 100 {
-		shipString = "SHIP0"
+		return shim.Error(fmt.Sprintf("Couldn't find Shipment. Error: %s " , err.Error()))
 	}
 
-	stringID = strconv.Itoa(id)
-	shipID = shipString + stringID
+	ship := Shipment{}
 
-	var ship = Shipment{Carrier: args[0], Recipient: args[1], Retailer: args[2], PickUp: args[3], Destination: args[4], Status: args[5], ContentList: args[6], Space: args[7]}
-	shipAsBytes , err := json.Marshal(ship);
+	json.Unmarshal(shipAsBytes, &ship)
+
+	ship.Status = args[1]
+
+	shipAsBytes, err = json.Marshal(ship)
 	if err != nil {
 		return shim.Error(fmt.Sprintf("Couldn't marshal Shipment. Error: %s " , err.Error()))
 	}
@@ -205,10 +184,10 @@ func (s *SmartContract) updateShipmentStatus(APIstub shim.ChaincodeStubInterface
 }
 
 
-func (s *SmartContract) queryAllCars(APIstub shim.ChaincodeStubInterface) peer.Response {
+func (s *SmartContract) queryAllShips(APIstub shim.ChaincodeStubInterface) peer.Response {
 
-	startKey := "CAR0"
-	endKey := "CAR999"
+	startKey := "SHIP000"
+	endKey := "SHIP999"
 
 	resultsIterator, err := APIstub.GetStateByRange(startKey, endKey)
 	if err != nil {
@@ -243,7 +222,7 @@ func (s *SmartContract) queryAllCars(APIstub shim.ChaincodeStubInterface) peer.R
 	}
 	buffer.WriteString("]")
 
-	fmt.Printf("- queryAllCars:\n%s\n", buffer.String())
+	fmt.Printf("- queryAllShipments:\n%s\n", buffer.String())
 
 	return shim.Success(buffer.Bytes())
 }
