@@ -126,7 +126,7 @@ func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) peer.Res
 
 	idHolders := []IdHolder{
 		IdHolder{Id:"1", Balance:"98053", Name: "Philipp der Erste"},
-		IdHolder{Id:"2", Balance:"20", Name: "Philipp der Zweite"},
+		IdHolder{Id:"2", Balance:"235", Name: "Philipp der Zweite"},
 		IdHolder{Id:"3", Balance:"5534", Name: "Philipp der Dritte"},
 		IdHolder{Id:"4", Balance:"2366", Name: "Philipp der Vierte"},
 		IdHolder{Id:"5", Balance:"334", Name: "Philipp der Erste Junior"},
