@@ -38,6 +38,7 @@ import (
 	"github.com/hyperledger/fabric/protos/peer"
 	"time"
 	"errors"
+	"strings"
 )
 
 // Define the Smart Contract structure
@@ -353,7 +354,7 @@ func (s *SmartContract) createTransaction (APIstub shim.ChaincodeStubInterface, 
 	transID = transString + stringID
 
 
-	var trans = Transaction{Id:transID, Amount: args.Amount, Receiver: args.Receiver, Sender: args.Sender, ShipId: args.ShipID, Type: args.Type}
+	trans := Transaction{Id:transID, Amount: args.Amount, Receiver: args.Receiver, Sender: args.Sender, ShipId: args.ShipID, Type: args.Type}
 
 
 	if trans.Receiver != "" {
@@ -459,8 +460,8 @@ func (s *SmartContract) changeBalance(APIstub shim.ChaincodeStubInterface, trans
 		if err != nil {
 			return errors.New("Blah4")
 		}
-		return errors.New("idHolder.Id: " + idHolder.Id + " trans.Receiver: " + trans.Receiver + " trans.Sender: " + trans.Sender)
-		if idHolder.Id == trans.Receiver{
+		//return errors.New("idHolder.Id: " + idHolder.Id + " trans.Receiver: " + trans.Receiver + " trans.Sender: " + trans.Sender)
+		if strings.Compare(idHolder.Id, trans.Receiver) == 0{
 
 			bal := idHolder.Balance
 
@@ -477,14 +478,17 @@ func (s *SmartContract) changeBalance(APIstub shim.ChaincodeStubInterface, trans
 
 			balFl = balFl + amountFl
 
+
 			idHolder.Balance = strconv.FormatFloat(balFl, 'f', 2, 64)
 
 			idHolderAsByte, _ := json.Marshal(idHolder)
 
-			APIstub.PutState(idHolder.Id, idHolderAsByte)
+			err = APIstub.PutState(idHolder.Id, idHolderAsByte)
+			if err != nil {
+				return err
+			}
 
-		}
-		if idHolder.Id == trans.Sender {
+		}else if strings.Compare(idHolder.Id, trans.Sender) == 0 {
 			bal := idHolder.Balance
 
 			balFl, err :=  strconv.ParseFloat(bal, 64)
@@ -505,7 +509,10 @@ func (s *SmartContract) changeBalance(APIstub shim.ChaincodeStubInterface, trans
 
 			idHolderAsByte, _ := json.Marshal(idHolder)
 
-			APIstub.PutState(idHolder.Id, idHolderAsByte)
+			err = APIstub.PutState(idHolder.Id, idHolderAsByte)
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil
